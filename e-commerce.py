@@ -15,12 +15,18 @@ with sync_playwright() as p:
     page.get_by_placeholder(text="Search for anything").press("Enter")
     page.wait_for_timeout(3000)
 
-    items = page.locator("#srp-river-results > ul > li")
+    items = page.locator("ul.srp-results.srp-grid.clearfix > li")
+    count = items.count()
 
-    for i in range(1, 6):
+    for i in range(1, 10):
         page.mouse.wheel(0, 400)
         page.wait_for_timeout(2000)
-    for i in items:
-        print(i)
+    
+    print("total_items: ", count)
+    ecommerce_listing_page_html = page.content()
+    with open("ecommerce_listing_page_html.html", "w", encoding="utf-8") as f:
+        f.write(ecommerce_listing_page_html)
+    
+
     page.close()
 
