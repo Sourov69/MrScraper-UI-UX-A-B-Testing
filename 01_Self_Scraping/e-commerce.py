@@ -24,22 +24,27 @@ with sync_playwright() as p:
     
     print("total_items: ", count)
 
-    with context.expect_page() as new_page_info:
-        items.nth(3).click()
+    
+    for i in range(1, 5):
 
-    new_page = new_page_info.value
-    page.wait_for_timeout(3000)
+        with context.expect_page() as new_page_info:
+            items.nth(i).click()
 
-    for i in range(1, 3):
-        new_page.mouse.wheel(0, 400)
-        new_page.wait_for_timeout(1500)
+        new_page = new_page_info.value
+        page.wait_for_timeout(3000)
 
-    ecommerce_product_detail_page_html = new_page.content()
-    with open("ecommerce_product_detail_page_html.html", "w", encoding="utf-8") as f:
-        f.write(ecommerce_product_detail_page_html)
+        for i in range(1, 3):
+            new_page.mouse.wheel(0, 400)
+            new_page.wait_for_timeout(1500)
+        
+        new_page.close()
+
+
+    # ecommerce_product_detail_page_html = new_page.content()
+    # with open("ecommerce_product_detail_page_html.html", "w", encoding="utf-8") as f:
+    #     f.write(ecommerce_product_detail_page_html)
     # page.go_back()
     # page.wait_for_timeout(2000)
 
-    new_page.close()
     page.close()
 
